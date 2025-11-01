@@ -1,0 +1,119 @@
+<div class="dashboard">
+  <header class="header">
+    <h1>Trading Dashboard</h1>
+    <div class="user-info">
+      <span>Welcome, {{username}}</span>
+      <button (click)="logout()" class="btn-logout">Logout</button>
+    </div>
+  </header>
+
+  <div class="dashboard-grid">
+    <div class="chart-section">
+      <div class="card">
+        <h3>Real-Time Stock Chart</h3>
+        <canvas #stockChart height="300"></canvas>
+      </div>
+      
+      <div class="card">
+        <h3>Stock List</h3>
+        <div class="stock-list">
+          <div *ngFor="let stock of stocks" 
+               class="stock-item" 
+               [class.selected]="selectedStock?.symbol === stock.symbol"
+               (click)="selectStock(stock)">
+            <div class="stock-info">
+              <strong>{{stock.symbol}}</strong>
+              <span class="stock-name">{{stock.name}}</span>
+            </div>
+            <div class="stock-price">
+              <div class="price">${{stock.currentPrice.toFixed(2)}}</div>
+              <div [class.price-up]="getPriceChange(stock) > 0" 
+                   [class.price-down]="getPriceChange(stock) < 0"
+                   class="change">
+                {{getPriceChange(stock).toFixed(2)}}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="card">
+        <h3>Portfolio Summary</h3>
+        <div class="summary-grid" *ngIf="portfolioSummary">
+          <div class="summary-item">
+            <label>Cash Balance</label>
+            <div class="value">${{portfolioSummary.balance.toFixed(2)}}</div>
+          </div>
+          <div class="summary-item">
+            <label>Portfolio Value</label>
+            <div class="value">${{portfolioSummary.currentValue.toFixed(2)}}</div>
+          </div>
+          <div class="summary-item">
+            <label>Total Value</label>
+            <div class="value">${{portfolioSummary.totalPortfolioValue.toFixed(2)}}</div>
+          </div>
+          <div class="summary-item">
+            <label>Profit/Loss</label>
+            <div class="value" [class.profit]="portfolioSummary.profitLoss > 0" 
+                 [class.loss]="portfolioSummary.profitLoss < 0">
+              ${{portfolioSummary.profitLoss.toFixed(2)}} ({{portfolioSummary.profitLossPercentage.toFixed(2)}}%)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Trade Panel</h3>
+        <div class="trade-form" *ngIf="selectedStock">
+          <div class="form-group">
+            <label>Stock</label>
+            <input type="text" [value]="selectedStock.symbol" readonly>
+          </div>
+          <div class="form-group">
+            <label>Current Price</label>
+            <input type="text" [value]="'$' + selectedStock.currentPrice.toFixed(2)" readonly>
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select [(ngModel)]="tradeRequest.type">
+              <option value="BUY">Buy</option>
+              <option value="SELL">Sell</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" [(ngModel)]="tradeRequest.quantity" min="1">
+          </div>
+          <div class="total-amount">
+            Total: ${{(selectedStock.currentPrice * tradeRequest.quantity).toFixed(2)}}
+          </div>
+          <button (click)="executeTrade()" [class.btn-buy]="tradeRequest.type === 'BUY'" 
+                  [class.btn-sell]="tradeRequest.type === 'SELL'" class="btn-trade">
+            {{tradeRequest.type}} {{tradeRequest.quantity}} Share(s)
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>My Holdings</h3>
+        <div class="portfolio-list">
+          <div *ngFor="let holding of portfolio" class="portfolio-item">
+            <div class="holding-info">
+              <strong>{{holding.stock.symbol}}</strong>
+              <span class="quantity">{{holding.quantity}} shares</span>
+            </div>
+            <div class="holding-value">
+              <div class="avg-price">Avg: ${{holding.averagePrice.toFixed(2)}}</div>
+              <div class="current-value">${{(holding.stock.currentPrice * holding.quantity).toFixed(2)}}</div>
+            </div>
+          </div>
+          <div *ngIf="portfolio.length === 0" class="empty-state">
+            No holdings yet. Start trading!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

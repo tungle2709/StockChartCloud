@@ -1,0 +1,252 @@
+.dashboard {
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.header {
+  background: white;
+  padding: 20px 30px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  margin: 0;
+  color: #667eea;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn-logout {
+  padding: 8px 16px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.chart-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.stock-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.stock-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.stock-item:hover {
+  background: #f8f9fa;
+}
+
+.stock-item.selected {
+  background: #e7eaf6;
+  border-left: 3px solid #667eea;
+}
+
+.stock-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stock-name {
+  font-size: 12px;
+  color: #666;
+}
+
+.stock-price {
+  text-align: right;
+}
+
+.price {
+  font-weight: bold;
+  color: #333;
+}
+
+.change {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.price-up {
+  color: #28a745;
+}
+
+.price-down {
+  color: #dc3545;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-item label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.summary-item .value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.value.profit {
+  color: #28a745;
+}
+
+.value.loss {
+  color: #dc3545;
+}
+
+.trade-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.total-amount {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.btn-trade {
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.btn-trade:hover {
+  opacity: 0.9;
+}
+
+.btn-buy {
+  background: #28a745;
+}
+
+.btn-sell {
+  background: #dc3545;
+}
+
+.portfolio-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.portfolio-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.holding-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.quantity {
+  font-size: 12px;
+  color: #666;
+}
+
+.holding-value {
+  text-align: right;
+}
+
+.avg-price {
+  font-size: 12px;
+  color: #666;
+}
+
+.current-value {
+  font-weight: bold;
+  color: #333;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
