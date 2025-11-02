@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Portfolio, PortfolioSummary } from '../models/stock.model';
-import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +9,13 @@ import { AuthService } from './auth.service';
 export class PortfolioService {
   private apiUrl = 'http://localhost:8080/api/portfolio';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
-
-  private getHeaders(): HttpHeaders {
-    const token = this.authService.getToken();
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
+  constructor(private http: HttpClient) {}
 
   getPortfolio(): Observable<Portfolio[]> {
-    return this.http.get<Portfolio[]>(`${this.apiUrl}`, {
-      headers: this.getHeaders()
-    });
+    return this.http.get<Portfolio[]>(`${this.apiUrl}`);
   }
 
   getPortfolioSummary(): Observable<PortfolioSummary> {
-    return this.http.get<PortfolioSummary>(`${this.apiUrl}/summary`, {
-      headers: this.getHeaders()
-    });
+    return this.http.get<PortfolioSummary>(`${this.apiUrl}/summary`);
   }
 }
