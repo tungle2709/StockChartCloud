@@ -44,13 +44,13 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     const user = this.authService.getCurrentUser();
-    if (!user) {
-      this.router.navigate(['/login']);
-      return;
+    if (user) {
+      this.username = user.username;
+      this.loadPortfolio();
+    } else {
+      this.username = 'Guest';
     }
-    this.username = user.username;
     this.loadStocks();
-    this.loadPortfolio();
     this.startRealTimeUpdates();
   }
 
