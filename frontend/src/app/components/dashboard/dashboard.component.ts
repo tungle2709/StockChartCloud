@@ -100,7 +100,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
             this.updateChart(updated);
           }
         }
-        this.loadPortfolio();
+        // Only load portfolio if user is authenticated
+        if (this.authService.getCurrentUser()) {
+          this.loadPortfolio();
+        }
       },
       error: (err) => console.error('Error in real-time updates:', err)
     });
