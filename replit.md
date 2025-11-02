@@ -1,13 +1,13 @@
 # Real-Time Financial Trading Application
 
 ## Project Overview
-This is a real-time financial trading application built with Spring Boot backend and Angular frontend, designed based on AWS cloud architecture concepts for future deployment.
+This is a real-time financial trading application built with Spring Boot backend and Angular frontend. It operates as a **demo platform without authentication**, featuring portfolio tracking and trade execution with a default $100,000 balance. The user will handle Docker containerization and AWS deployment separately.
 
 ## Technology Stack
 
 ### Backend
 - **Spring Boot 3.2.0** - Java-based REST API framework
-- **Spring Security** - JWT authentication
+- **Spring Security** - CORS configuration only (no authentication)
 - **Spring Data JPA** - Database ORM
 - **PostgreSQL** - Relational database
 - **Maven** - Dependency management
@@ -16,14 +16,16 @@ This is a real-time financial trading application built with Spring Boot backend
 - **Angular 17** - TypeScript-based SPA framework
 - **Chart.js** - Real-time stock price visualization
 - **RxJS** - Reactive programming for real-time updates
+- **Vite** - Development server configured for Replit hosting
 
 ## Features
-1. **User Authentication** - JWT-based login/signup system
+1. **No Authentication** - Direct access to trading dashboard
 2. **Real-Time Stock Prices** - Simulated live stock price updates every 5 seconds
 3. **Interactive Stock Charts** - Live charts showing price movements on the main dashboard
 4. **Trading Operations** - Buy and sell stocks with real-time portfolio updates
 5. **Portfolio Management** - View holdings, profit/loss, and account balance
 6. **Transaction History** - Track all trading activities
+7. **Default Balance** - $100,000 starting cash for demo trading
 
 ## Project Structure
 
@@ -34,26 +36,21 @@ This is a real-time financial trading application built with Spring Boot backend
 │   │   ├── service/           # Business logic
 │   │   ├── model/             # JPA entities
 │   │   ├── repository/        # Data access layer
-│   │   ├── security/          # JWT security configuration
-│   │   ├── config/            # Application configuration
+│   │   ├── config/            # CORS and application configuration
 │   │   └── dto/               # Data transfer objects
 │   └── pom.xml               # Maven dependencies
 │
 ├── frontend/                  # Angular Frontend
 │   ├── src/app/
 │   │   ├── components/       # UI components
-│   │   │   ├── login/        # Login page
 │   │   │   └── dashboard/    # Main trading dashboard with charts
 │   │   ├── services/         # API services
 │   │   └── models/           # TypeScript interfaces
-│   └── angular.json          # Angular configuration
+│   ├── angular.json          # Angular configuration
+│   └── vite.config.js        # Vite dev server config (allowedHosts: true)
 ```
 
 ## API Endpoints
-
-### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/signup` - User registration
 
 ### Stocks
 - `GET /api/stocks/all` - Get all available stocks
@@ -66,7 +63,7 @@ This is a real-time financial trading application built with Spring Boot backend
 - `GET /api/trades/recent` - Get recent trades
 
 ### Portfolio
-- `GET /api/portfolio` - Get user's portfolio holdings
+- `GET /api/portfolio` - Get portfolio holdings
 - `GET /api/portfolio/summary` - Get portfolio summary with P&L
 
 ## Running the Application
@@ -83,24 +80,35 @@ cd frontend
 npm start
 ```
 
-## Default Test Account
-- Username: `trader` (create via signup)
-- Initial Balance: $100,000
+## Configuration Notes
+- **Angular Development Server**: Configured with `allowedHosts: true` in vite.config.js for Replit hosting environment
+- **CORS**: Backend allows requests from localhost, 127.0.0.1, and Replit domains
+- **Stock Price Simulation**: Backend service updates stock prices every 5 seconds
+- **Default Demo Balance**: $100,000 cash available for trading
 
 ## Cloud Architecture Concepts
 This application is designed to be containerized and deployed to AWS with:
-- **Docker** - Container packaging
+- **Docker** - Container packaging (user handles separately)
 - **ECS/EKS** - Container orchestration
 - **RDS** - Managed PostgreSQL database
 - **ALB** - Load balancing
-- **Cognito** - User authentication (can replace JWT)
 - **CloudWatch** - Monitoring and logging
 - **Auto Scaling** - Dynamic scaling based on demand
 
-## Recent Changes
-- Implemented Spring Boot REST API with full CRUD operations
-- Created Angular dashboard with real-time stock charts
-- Integrated Chart.js for interactive price visualization
-- Added JWT-based authentication and authorization
-- Set up PostgreSQL database with JPA entities
-- Implemented simulated real-time stock price updates
+## Recent Changes (November 2, 2025)
+- **Removed all authentication features** including JWT, login components, and user management
+- Simplified Spring Security configuration to CORS-only (permits all requests)
+- Updated Portfolio and Trade entities to work without user references
+- Set default cash balance of $100,000 for demo trading
+- Fixed Vite host configuration with `allowedHosts: true` for Replit environment
+- Successfully cleaned backend build artifacts and verified application works without authentication
+- Removed auth-related DTOs (SignupRequest, LoginRequest, JwtResponse)
+- Updated frontend services to remove authorization headers
+- Simplified dashboard to remove login/logout UI elements
+
+## Design Decisions
+- **No Authentication**: Application operates as a demo with $100,000 default balance
+- **Port Configuration**: Angular on port 5000, Spring Boot on port 8080 with CORS enabled
+- **Constraints**: Cannot use Docker, MySQL, or AWS services on Replit - user will handle deployment
+- **Stock Data**: Uses mock/simulated real-time updates via scheduled backend service
+- **Simplified Schema**: Portfolio and trade features work without user accounts
