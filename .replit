@@ -50,6 +50,6 @@ externalPort = 80
 localPort = 8080
 externalPort = 8080
 
-[[ports]]
-localPort = 42329
-externalPort = 3000
+[deployment]
+run = ["sh", "-c", "/nix/store/lz7iav1hd92jbv44zf2rdd7b2mj23536-nodejs-20.19.3/bin/npm run watch"]
+deploymentTarget = "cloudrun"
