@@ -1,4 +1,4 @@
-modules = ["java-graalvm22.3", "nodejs-20", "angular-node-20"]
+modules = ["java-graalvm22.3", "nodejs-20", "angular-node-20", "postgresql-16"]
 [agent]
 expertMode = true
 
@@ -53,3 +53,6 @@ externalPort = 8080
 [deployment]
 run = ["sh", "-c", "/nix/store/lz7iav1hd92jbv44zf2rdd7b2mj23536-nodejs-20.19.3/bin/npm run watch"]
 deploymentTarget = "cloudrun"
+
+[nix]
+channel = "stable-25_05"

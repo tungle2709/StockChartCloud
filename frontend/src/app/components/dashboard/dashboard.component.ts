@@ -3,10 +3,8 @@ import { Chart, registerables } from 'chart.js';
 import { StockService } from '../../services/stock.service';
 import { PortfolioService } from '../../services/portfolio.service';
 import { TradeService } from '../../services/trade.service';
-import { AuthService } from '../../services/auth.service';
 import { Stock, Portfolio, PortfolioSummary, TradeRequest } from '../../models/stock.model';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
 
 Chart.register(...registerables);
 
@@ -23,7 +21,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   portfolio: Portfolio[] = [];
   portfolioSummary: PortfolioSummary | null = null;
   chart: Chart | null = null;
-  username: string = '';
   
   tradeRequest: TradeRequest = {
     symbol: '',
@@ -37,20 +34,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private stockService: StockService,
     private portfolioService: PortfolioService,
-    private tradeService: TradeService,
-    private authService: AuthService,
-    private router: Router
+    private tradeService: TradeService
   ) {}
 
   ngOnInit(): void {
-    const user = this.authService.getCurrentUser();
-    if (user) {
-      this.username = user.username;
-      this.loadPortfolio();
-    } else {
-      this.username = 'Guest';
-    }
     this.loadStocks();
+    this.loadPortfolio();
     this.startRealTimeUpdates();
   }
 
@@ -100,10 +89,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
             this.updateChart(updated);
           }
         }
-        // Only load portfolio if user is authenticated
-        if (this.authService.getCurrentUser()) {
-          this.loadPortfolio();
-        }
+        this.loadPortfolio();
       },
       error: (err) => console.error('Error in real-time updates:', err)
     });
@@ -197,10 +183,5 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getPriceChange(stock: Stock): number {
     return ((stock.currentPrice - stock.previousClose) / stock.previousClose) * 100;
-  }
-
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
   }
 }

@@ -2,12 +2,10 @@ package com.trading.app.controller;
 
 import com.trading.app.dto.TradeRequest;
 import com.trading.app.model.Trade;
-import com.trading.app.security.UserDetailsImpl;
 import com.trading.app.service.TradeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -20,11 +18,9 @@ public class TradeController {
     private TradeService tradeService;
     
     @PostMapping("/execute")
-    public ResponseEntity<?> executeTrade(@Valid @RequestBody TradeRequest tradeRequest, 
-                                          Authentication authentication) {
+    public ResponseEntity<?> executeTrade(@Valid @RequestBody TradeRequest tradeRequest) {
         try {
-            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            Trade trade = tradeService.executeTrade(tradeRequest, userDetails.getUsername());
+            Trade trade = tradeService.executeTrade(tradeRequest);
             return ResponseEntity.ok(trade);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -32,14 +28,12 @@ public class TradeController {
     }
     
     @GetMapping("/history")
-    public ResponseEntity<List<Trade>> getTradeHistory(Authentication authentication) {
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        return ResponseEntity.ok(tradeService.getUserTrades(userDetails.getUsername()));
+    public ResponseEntity<List<Trade>> getTradeHistory() {
+        return ResponseEntity.ok(tradeService.getAllTrades());
     }
     
     @GetMapping("/recent")
-    public ResponseEntity<List<Trade>> getRecentTrades(Authentication authentication) {
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        return ResponseEntity.ok(tradeService.getRecentTrades(userDetails.getUsername()));
+    public ResponseEntity<List<Trade>> getRecentTrades() {
+        return ResponseEntity.ok(tradeService.getRecentTrades());
     }
 }

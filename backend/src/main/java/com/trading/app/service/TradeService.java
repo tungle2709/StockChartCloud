@@ -4,11 +4,9 @@ import com.trading.app.dto.TradeRequest;
 import com.trading.app.model.Portfolio;
 import com.trading.app.model.Stock;
 import com.trading.app.model.Trade;
-import com.trading.app.model.User;
 import com.trading.app.repository.PortfolioRepository;
 import com.trading.app.repository.StockRepository;
 import com.trading.app.repository.TradeRepository;
-import com.trading.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,48 +20,32 @@ public class TradeService {
     private TradeRepository tradeRepository;
     
     @Autowired
-    private UserRepository userRepository;
-    
-    @Autowired
     private StockRepository stockRepository;
     
     @Autowired
     private PortfolioRepository portfolioRepository;
     
     @Transactional
-    public Trade executeTrade(TradeRequest tradeRequest, String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        
+    public Trade executeTrade(TradeRequest tradeRequest) {
         Stock stock = stockRepository.findBySymbol(tradeRequest.getSymbol())
                 .orElseThrow(() -> new RuntimeException("Stock not found"));
         
         double totalAmount = stock.getCurrentPrice() * tradeRequest.getQuantity();
         
         if (tradeRequest.getType() == Trade.TradeType.BUY) {
-            if (user.getBalance() < totalAmount) {
-                throw new RuntimeException("Insufficient balance");
-            }
-            
-            user.setBalance(user.getBalance() - totalAmount);
-            updatePortfolio(user, stock, tradeRequest.getQuantity(), stock.getCurrentPrice(), true);
+            updatePortfolio(stock, tradeRequest.getQuantity(), stock.getCurrentPrice(), true);
         } else {
-            Portfolio portfolio = portfolioRepository.findByUserAndStock(user, stock)
+            Portfolio portfolio = portfolioRepository.findByStock(stock)
                     .orElseThrow(() -> new RuntimeException("No holdings found"));
             
             if (portfolio.getQuantity() < tradeRequest.getQuantity()) {
                 throw new RuntimeException("Insufficient shares");
             }
             
-            user.setBalance(user.getBalance() + totalAmount);
-            updatePortfolio(user, stock, tradeRequest.getQuantity(), stock.getCurrentPrice(), false);
+            updatePortfolio(stock, tradeRequest.getQuantity(), stock.getCurrentPrice(), false);
         }
         
-        user.setUpdatedAt(LocalDateTime.now());
-        userRepository.save(user);
-        
         Trade trade = new Trade();
-        trade.setUser(user);
         trade.setStock(stock);
         trade.setType(tradeRequest.getType());
         trade.setQuantity(tradeRequest.getQuantity());
@@ -75,14 +57,13 @@ public class TradeService {
         return tradeRepository.save(trade);
     }
     
-    private void updatePortfolio(User user, Stock stock, int quantity, double price, boolean isBuy) {
-        Portfolio portfolio = portfolioRepository.findByUserAndStock(user, stock)
+    private void updatePortfolio(Stock stock, int quantity, double price, boolean isBuy) {
+        Portfolio portfolio = portfolioRepository.findByStock(stock)
                 .orElse(null);
         
         if (isBuy) {
             if (portfolio == null) {
                 portfolio = new Portfolio();
-                portfolio.setUser(user);
                 portfolio.setStock(stock);
                 portfolio.setQuantity(quantity);
                 portfolio.setAveragePrice(price);
@@ -104,15 +85,11 @@ public class TradeService {
         portfolioRepository.save(portfolio);
     }
     
-    public List<Trade> getUserTrades(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return tradeRepository.findByUserOrderByCreatedAtDesc(user);
+    public List<Trade> getAllTrades() {
+        return tradeRepository.findAllByOrderByCreatedAtDesc();
     }
     
-    public List<Trade> getRecentTrades(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return tradeRepository.findTop10ByUserOrderByCreatedAtDesc(user);
+    public List<Trade> getRecentTrades() {
+        return tradeRepository.findTop10ByOrderByCreatedAtDesc();
     }
 }
