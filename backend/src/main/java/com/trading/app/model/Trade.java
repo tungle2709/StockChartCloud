@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @Table(name = "trades")
 @Data
 @NoArgsConstructor
+@Id
 @AllArgsConstructor
 public class Trade {
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
