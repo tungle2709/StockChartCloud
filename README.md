@@ -4,7 +4,6 @@
 
 ![Trading Platform](https://img.shields.io/badge/Trading-Platform-success?style=for-the-badge&logo=chart.js&logoColor=white)
 ![Real Time](https://img.shields.io/badge/Real--Time-Updates-blue?style=for-the-badge&logo=socket.io&logoColor=white)
-![Demo Mode](https://img.shields.io/badge/Demo-$100K%20Balance-gold?style=for-the-badge&logo=dollar-sign&logoColor=white)
 
 </div>
 
