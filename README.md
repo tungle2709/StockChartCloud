@@ -148,7 +148,6 @@ GET    /api/portfolio/summary       # Portfolio summary
 
 | Feature | Description | Status |
 |---------|-------------|--------|
-| Starting Balance | $100,000 demo cash | Active |
 | Real-time Updates | 5-second price refresh | Active |
 | Live Charts | Interactive price charts | Active |
 | Authentication | Disabled for demo | Disabled |
@@ -178,7 +177,6 @@ This application is designed for containerization and AWS deployment:
 // Backend allows requests from:
 - localhost:5000 (Angular dev server)
 - 127.0.0.1:5000
-- Replit domains (if needed)
 ```
 
 ### Database Configuration
